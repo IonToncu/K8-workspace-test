@@ -1,0 +1,33 @@
+#-----------------------------------------------------------
+# Manifest file to create AWS EKS Cluster in Custom VPC
+#
+# eksctl create cluster -f eks_cluster_dev.yaml
+#
+# Copyleft (c) by Ion Toncu 2024
+#-----------------------------------------------------------
+
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name    : demo-dev
+  region  : eu-north-1
+  version : "1.27"
+
+vpc:
+  id      : "vpc-001798d59d4c42258"
+  subnets :
+    public:
+      my-vpc-subnet-public2-eu-north-1b : { id: subnet-0f539f554269f09dc }
+      my-vpc-subnet-public1-eu-north-1a : { id: subnet-0d0ffc741c5acbbec }
+    private:
+      my-vpc-subnet-private2-eu-north-1b : { id: subnet-063515ca8bc594bba }
+      my-vpc-subnet-private1-eu-north-1a : { id: subnet-0cc79f8a5ee44e000 }
+
+managedNodeGroups:
+-   name              : general
+    instanceType      : t3.micro
+    desiredCapacity   : 3 # At least 3 isntances
+    labels            : { role: general }
+    volumeSize        : 70
+    privateNetworking : true
